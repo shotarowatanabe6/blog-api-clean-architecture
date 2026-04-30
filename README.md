@@ -17,3 +17,17 @@
 - DB: MySQL
 - 認証: JWT (JSON Web Token)
 - DI: 手動 DI（Wire 等は使用しない）
+- ドキュメンテーション：Swaggo v1.16.6
+
+### Swaggoについて
+
+以下のコマンドを実行してSwagger用のファイル（/docs）を作成する
+
+```bash
+swag init -g cmd/main.go
+swag fmt
+```
+
+以下のURLからSwaggerへアクセスする
+
+[http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)

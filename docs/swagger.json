@@ -1,0 +1,45 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a blog server.",
+        "title": "Blog API",
+        "contact": {
+            "name": "shotarowatanabe6",
+            "email": "shotarowatanabe6@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/health": {
+            "get": {
+                "description": "ヘルスチェック",
+                "summary": "Check health status",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handler.response": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "ok"
+                }
+            }
+        }
+    }
+}
