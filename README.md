@@ -21,18 +21,13 @@
 
 ### Swaggoについて
 
-導入時のコマンド
-
-```bash
-go install github.com/swaggo/swag/cmd/swag@v1.16.5
-```
-
-````
+以下のコマンドを実行してSwagger用のファイル（/docs）を作成する
 
 ```bash
 swag init -g cmd/main.go
+swag fmt
 ```
 
-Swaggerへのアクセス: http://localhost:8080/swagger/index.html
+以下のURLからSwaggerへアクセスする
 
-````
+[http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
