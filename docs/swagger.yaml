@@ -1,6 +1,10 @@
 basePath: /api/v1
 definitions:
   handler.response:
+    properties:
+      message:
+        example: ok
+        type: string
     type: object
 host: localhost:8080
 info:

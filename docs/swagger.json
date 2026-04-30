@@ -33,7 +33,13 @@
     },
     "definitions": {
         "handler.response": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "ok"
+                }
+            }
         }
     }
 }

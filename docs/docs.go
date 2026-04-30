@@ -39,7 +39,13 @@ const docTemplate = `{
     },
     "definitions": {
         "handler.response": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "ok"
+                }
+            }
         }
     }
 }`
@@ -54,6 +60,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "This is a blog server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {
