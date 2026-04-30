@@ -17,7 +17,7 @@
 - DB: MySQL
 - 認証: JWT (JSON Web Token)
 - DI: 手動 DI（Wire 等は使用しない）
-- ドキュメンテーション：Swaggo v1.16.5
+- ドキュメンテーション：Swaggo v1.16.6
 
 ### Swaggoについて
 
