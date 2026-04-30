@@ -12,6 +12,6 @@ import (
 //	@Description	ヘルスチェック
 //	@Success		200	{object}	response
 //	@Router			/health [get]
-func HealthCheck(c *gin.Context) {
+func (h Handler) HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, response{Message: "ok"})
 }
