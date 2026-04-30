@@ -11,12 +11,8 @@
 
 ## 技術スタック
 
-- 言語: Go 1.24+
-- Webフレームワーク: Echo
-- ORM: GORM
-- DB: MySQL
-- 認証: JWT (JSON Web Token)
-- DI: 手動 DI（Wire 等は使用しない）
+- 言語: Go 1.26.2
+- Webフレームワーク: Gin
 - pre-commit v4.6.0
 - ドキュメンテーション：Swaggo v1.16.6
 
