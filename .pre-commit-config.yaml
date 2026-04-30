@@ -3,13 +3,28 @@ repos:
     hooks:
       - id: go-lint
         name: golangci-lint
-        entry: golangci-lint run
+        entry: golangci-lint
+        args: [run]
         language: golang
+        additional_dependencies:
+          - github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.8
         pass_filenames: false
-
-      - id: swag
-        name: swag init and format
-        entry: swag init -g cmd/main.go -o docs && swag fmt
+      - id: swag-init
+        name: swag init
+        entry: swag
+        args: [init, -g, cmd/main.go, -o, docs]
         language: golang
+        additional_dependencies:
+          - github.com/swaggo/swag/cmd/swag@v1.16.6
+        pass_filenames: false
+        files: \.go$
+
+      - id: swag-fmt
+        name: swag fmt
+        entry: swag
+        args: [fmt]
+        language: golang
+        additional_dependencies:
+          - github.com/swaggo/swag/cmd/swag@v1.16.6
         pass_filenames: false
         files: \.go$
