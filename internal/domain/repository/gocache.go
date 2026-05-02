@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"time"
 
 	gocache "github.com/patrickmn/go-cache"
@@ -27,7 +28,10 @@ func (c CacheRepository) Get(key string) (*string, error) {
 	if !ok {
 		return nil, nil
 	}
-	v := value.(string)
+	v, ok := value.(string)
+	if !ok {
+		return nil, fmt.Errorf("cache value for key %q has invalid type %T", key, value)
+	}
 
 	return &v, nil
 }
