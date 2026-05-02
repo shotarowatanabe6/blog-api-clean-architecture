@@ -48,6 +48,7 @@ func newRouter(hh handler.IHealthCheckHandler, uh handler.IUserHandler) *gin.Eng
 	{
 		userGroup := r.Group("/api/v1")
 		userGroup.GET("/users/:id", uh.FindByID)
+		userGroup.POST("/user", uh.Save)
 	}
 
 	return r
