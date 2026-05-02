@@ -28,9 +28,10 @@ func main() {
 
 	cacheRepo := repository.NewCacheRepository()
 	service := service.NewUserService(cacheRepo)
-	handler := handler.NewHandler(service)
+	healthCheckHandler := handler.NewHealthCheckHandler()
+	userHandler := handler.NewUserHandler(service)
 
-	r := newRouter(handler)
+	r := newRouter(healthCheckHandler, userHandler)
 
 	err := r.Run(":" + port)
 	if err != nil {
@@ -38,15 +39,15 @@ func main() {
 	}
 }
 
-func newRouter(h handler.IHandler) *gin.Engine {
+func newRouter(hh handler.IHealthCheckHandler, uh handler.IUserHandler) *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.GET("/health", h.HealthCheck)
+	r.GET("/health", hh.Check)
 
 	{
 		userGroup := r.Group("/api/v1")
-		userGroup.GET("/users/:id", h.GetUser)
+		userGroup.GET("/users/:id", uh.FindByID)
 	}
 
 	return r

@@ -9,33 +9,41 @@ import (
 )
 
 type UserService struct {
-	DB repository.IDBRepository
+	DBRepo repository.IDBRepository
 }
 
 func NewUserService(dbRepo repository.IDBRepository) IUserService {
 	return UserService{dbRepo}
 }
 
-func (s UserService) GetUser(id string) (*models.User, error) {
-	value, ok := s.DB.Get(id)
-	if !ok {
-		return nil, nil
+// IUserService : ドメインモデルuserの操作を担当する。どのようなDBかの知識は持たない。
+type IUserService interface {
+	FindByID(id string) (*models.User, error)
+	Save(user *models.User) error
+}
+
+func (s UserService) FindByID(id string) (*models.User, error) {
+	value, err := s.DBRepo.Get(id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get value")
 	}
 
-	user, ok := value.(models.User)
-	if !ok {
-		return nil, fmt.Errorf("failed to get user")
+	var user models.User
+	if err = json.Unmarshal([]byte(*value), &user); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal user")
 	}
 
 	return &user, nil
 }
 
-func (s UserService) SetUser(user *models.User) error {
+func (s UserService) Save(user *models.User) error {
 	bytes, err := json.Marshal(user)
 	if err != nil {
 		return fmt.Errorf("failed to marshal user data")
 	}
-	s.DB.Set("1", string(bytes))
+	if err := s.DBRepo.Set("1", string(bytes)); err != nil {
+		return fmt.Errorf("failed to set user data")
+	}
 
 	return nil
 }
