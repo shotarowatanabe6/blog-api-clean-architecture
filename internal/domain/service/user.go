@@ -6,6 +6,8 @@ import (
 
 	"blog-api-clean-architecture/internal/domain/models"
 	"blog-api-clean-architecture/internal/domain/repository"
+
+	"github.com/google/uuid"
 )
 
 type UserService struct {
@@ -44,7 +46,9 @@ func (s UserService) Save(user *models.User) error {
 	if err != nil {
 		return fmt.Errorf("failed to marshal user data")
 	}
-	if err := s.DBRepo.Set("1", string(bytes)); err != nil {
+
+	id := uuid.NewString()
+	if err := s.DBRepo.Set(id, string(bytes)); err != nil {
 		return fmt.Errorf("failed to set user data: %w", err)
 	}
 
