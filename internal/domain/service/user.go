@@ -25,12 +25,15 @@ type IUserService interface {
 func (s UserService) FindByID(id string) (*models.User, error) {
 	value, err := s.DBRepo.Get(id)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get value")
+		return nil, fmt.Errorf("failed to get value: %w", err)
 	}
 
 	var user models.User
 	if err = json.Unmarshal([]byte(*value), &user); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal user")
+		return nil, fmt.Errorf("failed to unmarshal user: %w", err)
+	}
+	if value == nil {
+		return nil, nil
 	}
 
 	return &user, nil
@@ -42,7 +45,7 @@ func (s UserService) Save(user *models.User) error {
 		return fmt.Errorf("failed to marshal user data")
 	}
 	if err := s.DBRepo.Set("1", string(bytes)); err != nil {
-		return fmt.Errorf("failed to set user data")
+		return fmt.Errorf("failed to set user data: %w", err)
 	}
 
 	return nil
