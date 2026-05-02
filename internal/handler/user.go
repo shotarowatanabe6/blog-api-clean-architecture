@@ -52,10 +52,11 @@ func (h UserHandler) Save(c *gin.Context) {
 		return
 	}
 
-	if err := h.Service.Save(&user); err != nil {
+	u, err := h.Service.Save(&user)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, response{Message: "failed to save user data"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	c.JSON(http.StatusCreated, u)
 }

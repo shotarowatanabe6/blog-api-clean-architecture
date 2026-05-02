@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"blog-api-clean-architecture/internal/domain/models"
 	"blog-api-clean-architecture/internal/domain/repository"
@@ -21,7 +22,7 @@ func NewUserService(dbRepo repository.IDBRepository) IUserService {
 // IUserService : ドメインモデルuserの操作を担当する。どのようなDBかの知識は持たない。
 type IUserService interface {
 	FindByID(id string) (*models.User, error)
-	Save(user *models.User) error
+	Save(user *models.User) (*models.User, error)
 }
 
 func (s UserService) FindByID(id string) (*models.User, error) {
@@ -41,16 +42,22 @@ func (s UserService) FindByID(id string) (*models.User, error) {
 	return &user, nil
 }
 
-func (s UserService) Save(user *models.User) error {
-	bytes, err := json.Marshal(user)
-	if err != nil {
-		return fmt.Errorf("failed to marshal user data")
-	}
-
+func (s UserService) Save(user *models.User) (*models.User, error) {
 	id := uuid.NewString()
-	if err := s.DBRepo.Set(id, string(bytes)); err != nil {
-		return fmt.Errorf("failed to set user data: %w", err)
+	u := &models.User{
+		ID:        id,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: float64(time.Now().UnixMilli()),
 	}
 
-	return nil
+	bytes, err := json.Marshal(u)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal user data")
+	}
+	if err := s.DBRepo.Set(id, string(bytes)); err != nil {
+		return nil, fmt.Errorf("failed to set user data: %w", err)
+	}
+
+	return u, nil
 }
