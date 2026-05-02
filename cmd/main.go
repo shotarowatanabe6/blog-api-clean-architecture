@@ -2,9 +2,9 @@
 package main
 
 import (
-	"blog-api-clean-architecture/internal/domain/repository"
 	"blog-api-clean-architecture/internal/domain/service"
 	"blog-api-clean-architecture/internal/handler"
+	"blog-api-clean-architecture/internal/infrastructure/cache"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -26,7 +26,7 @@ import (
 func main() {
 	port := "8080"
 
-	cacheRepo := repository.NewCacheRepository()
+	cacheRepo := cache.NewCacheRepository()
 	service := service.NewUserService(cacheRepo)
 	healthCheckHandler := handler.NewHealthCheckHandler()
 	userHandler := handler.NewUserHandler(service)
@@ -48,6 +48,7 @@ func newRouter(hh handler.IHealthCheckHandler, uh handler.IUserHandler) *gin.Eng
 	{
 		userGroup := r.Group("/api/v1")
 		userGroup.GET("/users/:id", uh.FindByID)
+		userGroup.POST("/user", uh.Save)
 	}
 
 	return r
