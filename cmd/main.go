@@ -1,7 +1,15 @@
 // Description: Clean Architecture の Compotion Root として扱う
 package main
 
-import "blog-api-clean-architecture/internal"
+import (
+	"blog-api-clean-architecture/internal/domain/repository"
+	"blog-api-clean-architecture/internal/domain/service"
+	"blog-api-clean-architecture/internal/handler"
+
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+)
 
 //	@title			Blog API
 //	@version		1.0
@@ -18,8 +26,29 @@ import "blog-api-clean-architecture/internal"
 func main() {
 	port := "8080"
 
-	err := internal.Run(port)
+	cacheRepo := repository.NewCacheRepository()
+	service := service.NewUserService(cacheRepo)
+	healthCheckHandler := handler.NewHealthCheckHandler()
+	userHandler := handler.NewUserHandler(service)
+
+	r := newRouter(healthCheckHandler, userHandler)
+
+	err := r.Run(":" + port)
 	if err != nil {
 		panic(err)
 	}
+}
+
+func newRouter(hh handler.IHealthCheckHandler, uh handler.IUserHandler) *gin.Engine {
+	r := gin.Default()
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/health", hh.Check)
+
+	{
+		userGroup := r.Group("/api/v1")
+		userGroup.GET("/users/:id", uh.FindByID)
+	}
+
+	return r
 }
