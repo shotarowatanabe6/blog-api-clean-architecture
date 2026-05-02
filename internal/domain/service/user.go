@@ -27,13 +27,13 @@ func (s UserService) FindByID(id string) (*models.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get value: %w", err)
 	}
+	if value == nil {
+		return nil, nil
+	}
 
 	var user models.User
 	if err = json.Unmarshal([]byte(*value), &user); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal user: %w", err)
-	}
-	if value == nil {
-		return nil, nil
 	}
 
 	return &user, nil
