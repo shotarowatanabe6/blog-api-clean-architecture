@@ -1,3 +1,4 @@
+//go:generate mockgen -source=repository.go -destination=mock/repository.go
 package repository
 
 // IDBRepository : ドメイン層が必要とするストレージ操作のポート（インターフェース）。

@@ -1,3 +1,4 @@
+//go:generate mockgen -source=health.go -destination=mock/health.go
 package handler
 
 import (
