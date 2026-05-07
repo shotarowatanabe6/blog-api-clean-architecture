@@ -48,7 +48,7 @@ func (h UserHandler) FindByID(c *gin.Context) {
 
 func (h UserHandler) Save(c *gin.Context) {
 	var user models.User
-	if err := c.BindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, response{Message: "bad request"})
 		return
 	}
