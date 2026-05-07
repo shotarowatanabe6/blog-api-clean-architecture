@@ -54,7 +54,7 @@ func (s UserService) Save(user *models.User) (*models.User, error) {
 
 	bytes, err := json.Marshal(u)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal user data")
+		return nil, fmt.Errorf("failed to marshal user data: %w", err)
 	}
 	if err := s.DBRepo.Set(id, string(bytes)); err != nil {
 		return nil, fmt.Errorf("failed to set user data: %w", err)
