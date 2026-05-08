@@ -10,11 +10,66 @@
 package mock_handler
 
 import (
+	models "blog-api-clean-architecture/internal/domain/models"
 	reflect "reflect"
 
 	gin "github.com/gin-gonic/gin"
 	gomock "go.uber.org/mock/gomock"
 )
+
+// MockIUserService is a mock of IUserService interface.
+type MockIUserService struct {
+	ctrl     *gomock.Controller
+	recorder *MockIUserServiceMockRecorder
+	isgomock struct{}
+}
+
+// MockIUserServiceMockRecorder is the mock recorder for MockIUserService.
+type MockIUserServiceMockRecorder struct {
+	mock *MockIUserService
+}
+
+// NewMockIUserService creates a new mock instance.
+func NewMockIUserService(ctrl *gomock.Controller) *MockIUserService {
+	mock := &MockIUserService{ctrl: ctrl}
+	mock.recorder = &MockIUserServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIUserService) EXPECT() *MockIUserServiceMockRecorder {
+	return m.recorder
+}
+
+// FindByID mocks base method.
+func (m *MockIUserService) FindByID(id string) (*models.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByID", id)
+	ret0, _ := ret[0].(*models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByID indicates an expected call of FindByID.
+func (mr *MockIUserServiceMockRecorder) FindByID(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockIUserService)(nil).FindByID), id)
+}
+
+// Save mocks base method.
+func (m *MockIUserService) Save(user *models.User) (*models.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", user)
+	ret0, _ := ret[0].(*models.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Save indicates an expected call of Save.
+func (mr *MockIUserServiceMockRecorder) Save(user any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockIUserService)(nil).Save), user)
+}
 
 // MockIUserHandler is a mock of IUserHandler interface.
 type MockIUserHandler struct {

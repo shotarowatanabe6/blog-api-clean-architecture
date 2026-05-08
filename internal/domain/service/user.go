@@ -1,4 +1,3 @@
-//go:generate mockgen -source=user.go -destination=mock/user.go
 package service
 
 import (
@@ -16,14 +15,8 @@ type UserService struct {
 	DBRepo repository.IDBRepository
 }
 
-func NewUserService(dbRepo repository.IDBRepository) IUserService {
+func NewUserService(dbRepo repository.IDBRepository) UserService {
 	return UserService{dbRepo}
-}
-
-// IUserService : ドメインモデルuserの操作を担当する。どのようなDBかの知識は持たない。
-type IUserService interface {
-	FindByID(id string) (*models.User, error)
-	Save(user *models.User) (*models.User, error)
 }
 
 func (s UserService) FindByID(id string) (*models.User, error) {

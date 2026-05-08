@@ -6,10 +6,15 @@ import (
 	"net/http"
 
 	"blog-api-clean-architecture/internal/domain/models"
-	"blog-api-clean-architecture/internal/domain/service"
 
 	"github.com/gin-gonic/gin"
 )
+
+// IUserService : handler層が必要とするユーザー操作のインターフェース
+type IUserService interface {
+	FindByID(id string) (*models.User, error)
+	Save(user *models.User) (*models.User, error)
+}
 
 type IUserHandler interface {
 	FindByID(c *gin.Context)
@@ -17,10 +22,10 @@ type IUserHandler interface {
 }
 
 type UserHandler struct {
-	Service service.IUserService
+	Service IUserService
 }
 
-func NewUserHandler(service service.IUserService) IUserHandler {
+func NewUserHandler(service IUserService) IUserHandler {
 	return UserHandler{service}
 }
 

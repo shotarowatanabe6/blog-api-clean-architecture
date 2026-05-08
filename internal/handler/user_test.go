@@ -2,7 +2,7 @@ package handler_test
 
 import (
 	"blog-api-clean-architecture/internal/domain/models"
-	mock_service "blog-api-clean-architecture/internal/domain/service/mock"
+	mock_handler "blog-api-clean-architecture/internal/handler/mock"
 	"blog-api-clean-architecture/internal/handler"
 	"fmt"
 	"net/http"
@@ -22,7 +22,7 @@ func TestUserHandler_FindByID(t *testing.T) {
 		name                 string
 		userID               string
 		expectedStatus       int
-		expectedMockBehavior func(mock *mock_service.MockIUserService)
+		expectedMockBehavior func(mock *mock_handler.MockIUserService)
 	}{
 		{
 			name:                 "異常系：URIにidが含まれていない場合は Bad Request とする",
@@ -34,7 +34,7 @@ func TestUserHandler_FindByID(t *testing.T) {
 			name:           "異常系：Serviceがエラーを返した場合は Internal Server Error とする",
 			userID:         "abc123",
 			expectedStatus: http.StatusInternalServerError,
-			expectedMockBehavior: func(mock *mock_service.MockIUserService) {
+			expectedMockBehavior: func(mock *mock_handler.MockIUserService) {
 				mock.EXPECT().FindByID("abc123").Return(nil, fmt.Errorf("error"))
 			},
 		},
@@ -42,7 +42,7 @@ func TestUserHandler_FindByID(t *testing.T) {
 			name:           "正常系：Serviceが正常に実施された場合は OK とする",
 			userID:         "abc123",
 			expectedStatus: http.StatusOK,
-			expectedMockBehavior: func(mock *mock_service.MockIUserService) {
+			expectedMockBehavior: func(mock *mock_handler.MockIUserService) {
 				mock.EXPECT().FindByID("abc123").Return(&models.User{ID: "abc123", Name: "taro.yamada", Email: "taro.yamada@example.com", CreatedAt: 1}, nil)
 			},
 		},
@@ -50,7 +50,7 @@ func TestUserHandler_FindByID(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// モックの振る舞いを定義
-			userService := mock_service.NewMockIUserService(ctrl)
+			userService := mock_handler.NewMockIUserService(ctrl)
 			if tt.expectedMockBehavior != nil {
 				tt.expectedMockBehavior(userService)
 			}
@@ -82,7 +82,7 @@ func TestUserHandler_Save(t *testing.T) {
 		name                 string
 		requestBody          string
 		expectedStatus       int
-		expectedMockBehavior func(mock *mock_service.MockIUserService)
+		expectedMockBehavior func(mock *mock_handler.MockIUserService)
 	}{
 		{
 			name:                 "異常系：リクエストにnameが含まれていない場合は Bad Request とする",
@@ -100,7 +100,7 @@ func TestUserHandler_Save(t *testing.T) {
 			name:           "異常系：リクエストにname,emailが含まれているが、Serviceがエラーを返した場合は Internal Server Error とする",
 			requestBody:    `{"name": "taro.yamada", "email": "taro.yamada@example.com"}`,
 			expectedStatus: http.StatusInternalServerError,
-			expectedMockBehavior: func(mock *mock_service.MockIUserService) {
+			expectedMockBehavior: func(mock *mock_handler.MockIUserService) {
 				mock.EXPECT().Save(&models.User{Name: "taro.yamada", Email: "taro.yamada@example.com"}).Return(nil, fmt.Errorf("error"))
 			},
 		},
@@ -108,7 +108,7 @@ func TestUserHandler_Save(t *testing.T) {
 			name:           "正常系：リクエストにname,emailが含まれており、Serviceが正常に実施された場合は Created とする",
 			requestBody:    `{"name": "taro.yamada", "email": "taro.yamada@example.com"}`,
 			expectedStatus: http.StatusCreated,
-			expectedMockBehavior: func(mock *mock_service.MockIUserService) {
+			expectedMockBehavior: func(mock *mock_handler.MockIUserService) {
 				mock.EXPECT().Save(&models.User{Name: "taro.yamada", Email: "taro.yamada@example.com"}).Return(&models.User{ID: "1", Name: "taro.yamada", Email: "taro.yamada@example.com", CreatedAt: 1}, nil)
 			},
 		},
@@ -116,7 +116,7 @@ func TestUserHandler_Save(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// モックの振る舞いを定義
-			userService := mock_service.NewMockIUserService(ctrl)
+			userService := mock_handler.NewMockIUserService(ctrl)
 			if tt.expectedMockBehavior != nil {
 				tt.expectedMockBehavior(userService)
 			}
